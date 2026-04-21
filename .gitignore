@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
+
+# Models (quá nặng, lưu trên HuggingFace Hub)
+models/
+*.bin
+*.pt
+*.safetensors
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# FAISS index (tạo lại được)
+data/processed/faiss_index/
+
+# API keys
+*.env
+config/secrets.yaml
