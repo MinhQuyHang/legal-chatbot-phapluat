@@ -1,3 +1,5 @@
+# XÂY DỰNG HỆ THỐNG HỎI ĐÁP MÔN PHÁP LUẬT ĐẠI CƯƠNG CHO SINH VIÊN TRƯỜNG ĐẠI HỌC MỞ TP.HCM SỬ DỤNG PHÂN LOẠI VÀ RAG
+
 # LawChat — Hệ thống Hỏi đáp Pháp luật Đại cương dựa trên RAG
 
 Hệ thống hỏi đáp tự động cho môn Pháp luật Đại cương tại Trường Đại học Mở TP.HCM, xây dựng trên kiến trúc Retrieval-Augmented Generation (RAG) 3 tầng. Hệ thống truy xuất các đoạn văn bản liên quan từ giáo trình gốc và sinh câu trả lời được ràng buộc hoàn toàn vào ngữ cảnh đó, không phụ thuộc vào bất kỳ API bên ngoài nào.
@@ -165,6 +167,7 @@ Tỷ lệ Global cao phản ánh xu hướng của bộ phân loại hiện tạ
 ├── rag/
 │   ├── rag_pipeline.py       # Pipeline truy xuất chính (FAISS, BM25, hybrid)
 │   └── evaluate_rag.py       # Đánh giá retrieval và grid search tham số
+├── setup_data.py             # Tải model và data nặng từ Google Drive
 ├── main.py                   # CLI entry point
 └── requirements.txt
 ```
@@ -187,7 +190,29 @@ Tải mô hình ngôn ngữ:
 ollama pull mrjacktung/phogpt-4b-chat-gguf
 ```
 
-FAISS index (`faiss_index.bin`) và metadata (`faiss_meta.json`) được build tự động lần đầu chạy nếu chưa có, không cần thao tác thủ công.
+### Tải model và data nặng
+
+Một số file không được lưu trên GitHub do kích thước lớn (model PhoBERT ~500MB, FAISS index, RAG data). Chạy lệnh sau để tải tự động từ Google Drive:
+
+```bash
+pip install gdown
+python setup_data.py
+```
+
+Script sẽ tự động tải về và đặt đúng vị trí các file sau:
+
+| File | Mô tả |
+|---|---|
+| `model/phobert_classifier/` | Trọng số PhoBERT đã fine-tune (~500MB) |
+| `data/rag_data.json` | 1.034 chunk tri thức |
+| `data/faiss_index.bin` | FAISS vector index |
+| `data/faiss_meta.json` | Metadata của FAISS index |
+
+>  Nếu tải thất bại do giới hạn Drive, tải thủ công tại các link sau rồi đặt vào đúng thư mục:
+> - `model/phobert_classifier/` → [Google Drive](https://drive.google.com/drive/folders/1pQTnvZ9kkdOoYLgDrQeM4BKLZnz1sj7n?usp=sharing)
+> - `data/rag_data.json` → [Google Drive](https://drive.google.com/file/d/1SKiw2jocREs2rBXBb0ngUGVjqLKCfwgi/view?usp=sharing)
+> - `data/faiss_index.bin` → [Google Drive](https://drive.google.com/file/d/1BUkFigmpnC5DljfYfJsjZdcR_--5AdMA/view?usp=sharing)
+> - `data/faiss_meta.json` → [Google Drive](https://drive.google.com/file/d/1wpA_K_7J7AbHk_Oqj2E9pG73dapS_-7i/view?usp=sharing)
 
 ### Huấn luyện lại PhoBERT (tùy chọn)
 
