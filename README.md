@@ -176,8 +176,8 @@ Tỷ lệ Global cao phản ánh xu hướng của bộ phân loại hiện tạ
 Yêu cầu: Python 3.10 trở lên, Ollama đã cài đặt và đang chạy.
 
 ```bash
-git clone https://github.com/your-org/lawchat.git
-cd lawchat
+git clone https://github.com/MinhQuyHang/legal-chatbot-phapluat.git
+cd legal-chatbot-phapluat
 pip install -r requirements.txt
 ```
 
