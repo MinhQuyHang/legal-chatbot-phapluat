@@ -1,0 +1,18 @@
+model:
+  seed: 42
+  type: phobert
+  phobert_model_path: model/phobert_classifier
+  val_macro_f1: 0.659
+  best_epoch: 5
+  use_segment: true
+rag:
+  confidence_threshold: 0.45
+  margin_threshold: 0.15
+  score_gate: 0.25
+  chapter_boost: 1.1
+  retriever: multilingual-e5
+  e5_model: intfloat/multilingual-e5-large
+  search_meta:
+    hit_at_3: 0.8214
+    mrr: 0.6548
+    score: 0.7548

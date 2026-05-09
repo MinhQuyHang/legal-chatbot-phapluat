@@ -1,0 +1,4 @@
+OLLAMA_BASE_URL=http://localhost:11434
+PHOGPT_MODEL=mrjacktung/phogpt-4b-chat-gguf
+LLM_TEMPERATURE=0.1
+LLM_MEMORY_K=5

@@ -1,0 +1,15 @@
+{
+  "keyword_hit_at_1": 0.8929,
+  "chapter_hit_at_k": {
+    "1": 0.5357,
+    "3": 0.8214,
+    "5": 0.9286
+  },
+  "mrr": 0.678,
+  "score_avg": 0.7481,
+  "route_distribution": {
+    "global": 26,
+    "scoped": 2
+  },
+  "n_questions": 28
+}
