@@ -1,21 +1,23 @@
+# Model weights (quá nặng)
+model/phobert_classifier/
+*.bin
+*.safetensors
+
+# RAG index (rebuild được)
+data/faiss_index.bin
+data/faiss_meta.json
+data/rag_data.json
+
 # Python
 __pycache__/
 *.pyc
 *.pyo
 .env
+*.egg-info/
 
-# Models (quá nặng, lưu trên HuggingFace Hub)
-models/
-*.bin
-*.pt
-*.safetensors
+# Streamlit
+.streamlit/
 
-# Jupyter checkpoints
-.ipynb_checkpoints/
-
-# FAISS index (tạo lại được)
-data/processed/faiss_index/
-
-# API keys
-*.env
-config/secrets.yaml
+# OS
+.DS_Store
+Thumbs.db
