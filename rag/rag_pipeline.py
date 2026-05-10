@@ -38,6 +38,7 @@ CHAPTER_NAMES = {
     10: "Luật Hôn nhân và Gia đình",
 }
 CHAPTER_KEYWORDS = {
+        6:  ["hành chính", "quản lý nhà nước", "chấp hành", "điều hành"],
         7:  ["tội phạm", "hình phạt", "tù", "hình sự", "tố tụng", "bị cáo"],
         10: ["ly hôn", "kết hôn", "hôn nhân", "vợ", "chồng", "nuôi con"],
         9:  ["lao động", "hợp đồng lao động", "tiền lương", "sa thải"],
