@@ -150,7 +150,7 @@ Các đoạn văn được truy xuất ghép thành một khối ngữ cảnh v�
 
 Model được tạo lại qua ollama create với modelfile tùy chỉnh để loại bỏ stop token mặc định (<s>, </s>) vốn khiến output bị cắt ngắn sau 1–2 câu. Mỗi chunk được giới hạn còn 600 ký tự trước khi đưa vào prompt để kiểm soát độ trễ và tránh vượt quá context window hiệu dụng.
 
-Đầu ra được lọc qua bộ hậu xử lý loại bỏ các artifact định dạng còn sót lại, Cơ chế phát hiện hallucination so sánh câu trả lời với lịch sử hội thoại, tự động fallback về đoanj RAG liên quan nhất nếu phát hiện model đang lặp lại câu trả lời cũ.
+Đầu ra được lọc qua bộ hậu xử lý loại bỏ các artifact định dạng còn sót lại, Cơ chế phát hiện hallucination so sánh câu trả lời với lịch sử hội thoại, tự động fallback về đoạn RAG liên quan nhất nếu phát hiện model đang lặp lại câu trả lời cũ.
 
 ---
 
@@ -266,15 +266,18 @@ pip install -r requirements.txt
 ```bash
 # Pull model gốc
 ollama pull mrjacktung/phogpt-4b-chat-gguf
+```
 
-# Tạo Modelfile (tạo file tên Modelfile, không có đuôi)
+# Tạo Modelfile (tạo file tên Modelfile, không có đuôi) với nội dung:
 FROM mrjacktung/phogpt-4b-chat-gguf
 PARAMETER temperature 0.3
 PARAMETER num_predict 512
 
-# Tạo model tùy chỉnh bỏ stop token mặc định
+Sau đó tạo model tùy chỉnh:
+```bash
 ollama create phogpt-legal -f Modelfile
 ```
+
 
 ### Bước 4 — Tải model và data nặng
 
