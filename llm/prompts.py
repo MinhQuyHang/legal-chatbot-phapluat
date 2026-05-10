@@ -7,24 +7,13 @@ from langchain_core.prompts import PromptTemplate
 
 # ── 1. Hàm hỗ trợ xử lý dữ liệu JSON (Metadata) ────────────────
 def format_rag_docs(docs):
-    """
-    Hàm này nhận đầu vào là danh sách các tài liệu (Document) lấy ra từ VectorDB.
-    Nó sẽ bóc tách metadata (chapter, topic) từ file JSON và ráp nối với nội dung.
-    """
     formatted_texts = []
     for doc in docs:
-        # Lấy thông tin từ metadata (nếu không có thì để trống)
         chapter = doc.metadata.get("chapter", "Không rõ")
         topic = doc.metadata.get("topic", "Không rõ chủ đề")
-        
-        # Lấy nội dung chính (trường "content" trong JSON của bạn)
         content = doc.page_content
-        
-        # Ráp lại thành một đoạn văn bản rõ ràng cho PhoGPT đọc
         formatted_doc = f"[Chương {chapter} - Chủ đề: {topic}]\nNội dung: {content}"
         formatted_texts.append(formatted_doc)
-    
-    # Nối các tài liệu bằng 2 dấu xuống dòng để tách biệt rõ ràng
     return "\n\n".join(formatted_texts)
 
 
@@ -83,38 +72,41 @@ CONV_RAG_TEMPLATE_STRING = CONV_RAG_TEMPLATE
 
 
 # ==============================================================================
-# ChatML PROMPT dùng cho LegalChatChain
+# PROMPT dùng cho PhoGPT
 # ==============================================================================
 SYSTEM_PROMPT = (
     "Bạn là trợ lý học tập môn Pháp luật Đại cương - Đại học Mở TP.HCM.\n"
-    "Chỉ trả lời dựa trên tài liệu được cung cấp.\n"
+    "Chỉ trả lời dựa trên TÀI LIỆU THAM KHẢO được cung cấp.\n"
     "Trả lời ngắn gọn, súc tích, 3-4 câu. Không copy nguyên văn tài liệu.\n"
     "Nếu tài liệu không có thông tin: trả lời 'Nội dung này chưa có trong giáo trình.'\n"
-    "Không lặp lại câu hỏi. Chỉ văn bản thuần."
 )
 
-def build_chatml_prompt(
+def build_phogpt_prompt(
     system: str = SYSTEM_PROMPT,
     context: str = "",
-    history: list[tuple[str, str]] = None,
+    history: list = None,
     question: str = ""
 ) -> str:
-    """
-    Xây dựng prompt chuẩn ChatML cho PhoGPT.
-    """
-    parts = [f"<|im_start|>system\n{system}<|im_end|>"]
+    parts = []
 
-    if history:
-        for user_msg, assistant_msg in history:
-            parts.append(f"<|im_start|>user\n{user_msg}<|im_end|>")
-            parts.append(f"<|im_start|>assistant\n{assistant_msg}<|im_end|>")
+    # System context
+    parts.append(system)
+    parts.append("")
 
-    user_prompt = (
-        f"Tài liệu tham khảo:\n{context}\n\n"
+    # Lịch sử (chỉ user turn)
+    # if history:
+    #   for user_msg, _ in history[-2:]:
+    #        parts.append(f"<s>USER: {user_msg}")
+    #        parts.append("ASSISTANT: [Đã trả lời]</s>")
+    #    parts.append("")
+
+    # RAG context + câu hỏi — format PhoGPT
+    user_turn = (
+        f"Tài liệu:\n{context}\n\n"
         f"Câu hỏi: {question}\n\n"
-        f"Yêu cầu: Tóm tắt trong 3-4 câu dựa trên tài liệu trên. "
-        f"Không được copy nguyên văn tài liệu. Trả lời trực tiếp, không nhắc lại câu hỏi."
+        f"Trả lời câu hỏi dựa vào tài liệu trên:"
     )
-    parts.append(f"<|im_start|>user\n{user_prompt}<|im_end|>")
-    parts.append("<|im_start|>assistant\n")
+    parts.append(user_turn)
+    # parts.append("ASSISTANT:")  
+
     return "\n".join(parts)
