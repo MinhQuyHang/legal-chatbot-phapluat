@@ -239,6 +239,7 @@ legal-chatbot-phapluat/
 ├── setup_data.py             # Tải model và data nặng từ Google Drive
 ├── main.py                   # CLI entry point
 ├── .gitignore
+├── Modelfile 
 ├── requirements.txt
 └── README.md
 ```
