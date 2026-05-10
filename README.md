@@ -358,7 +358,7 @@ Toàn bộ tham số có thể điều chỉnh trong `config/settings.yaml`.
 | `score_gate` | 0,25 | Điểm hybrid tối thiểu để một chunk được chấp nhận |
 | `chapter_boost` | 1,10 | Hệ số nhân điểm cho chunk thuộc chương được dự đoán |
 | `alpha` | 0,60 | Trọng số của dense score trong công thức hybrid |
-| `max_chunk_length` | 800 | Số ký tự tối đa của mỗi chunk đưa vào prompt LLM |
+| `max_chunk_length` | 500 | Số ký tự tối đa của mỗi chunk đưa vào prompt LLM |
 
 Sau khi thay đổi kho tri thức hoặc bộ phân loại, nên chạy lại `evaluate_rag.py` để tối ưu lại các tham số này.
 
