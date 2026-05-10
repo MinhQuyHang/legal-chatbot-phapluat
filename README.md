@@ -40,7 +40,7 @@ LawChat giải quyết vấn đề này bằng cách ràng buộc toàn bộ qu�
 
 -  **Phân loại câu hỏi thông minh** — PhoBERT tự động xác định câu hỏi thuộc chương nào, thu hẹp không gian tìm kiếm từ 1.034 chunks xuống còn phạm vi 1 chương khi đủ tự tin.
 -  **Truy xuất lai (Hybrid Search)** — kết hợp Dense Retrieval (E5-Large + FAISS) và Sparse Retrieval (BM25) để bắt được cả ngữ nghĩa lẫn từ khóa pháp lý đặc thù.
--  **Sinh câu trả lời có kiểm soát** — PhoGPT-4B với ChatML prompt và stop tokens, ràng buộc chặt chẽ vào ngữ cảnh được truy xuất.
+-  **Sinh câu trả lời có kiểm soát** — PhoGPT-4B với Plain-text prompt + Custom modelfile (phogpt-legal), ràng buộc chặt chẽ vào ngữ cảnh được truy xuất.
 -  **Nguồn tham khảo minh bạch** — mỗi câu trả lời đi kèm danh sách đoạn trích được dùng, kèm điểm liên quan.
 -  **Hoàn toàn cục bộ** — toàn bộ suy luận chạy qua Ollama, không gửi dữ liệu ra ngoài.
 
@@ -99,12 +99,12 @@ Câu hỏi người dùng
 └─────────────────────────────────────────────┘
         │
         ▼
-┌─────────────────────────────────────────────┐
-│  Tầng 3 — PhoGPT-4B (Ollama)               │
-│  • ChatML prompt + Stop tokens              │
-│  • Ràng buộc hoàn toàn vào ngữ cảnh        │
-│  • Hậu xử lý loại bỏ artifact định dạng    │
-└─────────────────────────────────────────────┘
+┌───────────────────────────────────────────────────────┐
+│  Tầng 3 — PhoGPT-4B (Ollama)                          │
+│  • Plain-text prompt + Custom modelfile (phogpt-legal)│
+│  • Ràng buộc hoàn toàn vào ngữ cảnh                   │
+│  • Hậu xử lý loại bỏ artifact định dạng               │
+└───────────────────────────────────────────────────────┘
         │
         ▼
 Câu trả lời + Danh sách đoạn tham khảo
@@ -150,7 +150,8 @@ Các đoạn văn được truy xuất ghép thành một khối ngữ cảnh v�
 
 Model được tạo lại qua ollama create với modelfile tùy chỉnh để loại bỏ stop token mặc định (<s>, </s>) vốn khiến output bị cắt ngắn sau 1–2 câu. Mỗi chunk được giới hạn còn 600 ký tự trước khi đưa vào prompt để kiểm soát độ trễ và tránh vượt quá context window hiệu dụng.
 
-Đầu ra được lọc qua bộ hậu xử lý loại bỏ các artifact định dạng còn sót lại. Cơ chế phát hiện hallucination so sánh câu trả lời với lịch sử hội thoại, tự động fallback về đoạn RAG liên quan nhất nếu phát hiện model đang lặp lại câu trả lời cũ.
+Đầu ra được lọc qua bộ hậu xử lý loại bỏ các artifact định dạng còn sót lại, Cơ chế phát hiện hallucination so sánh câu trả lời với lịch sử hội thoại, tự động fallback về đoanj RAG liên quan nhất nếu phát hiện model đang lặp lại câu trả lời cũ.
+
 ---
 
 ## Kết quả đánh giá
