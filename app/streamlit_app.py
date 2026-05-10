@@ -220,6 +220,7 @@ def _load_chain():
         temperature=LLM_TEMPERATURE,
         top_k_docs=RAG_TOP_K,
         memory_k=LLM_MEMORY_K,
+        max_chunk_length=600,
     )
     return chain
 
