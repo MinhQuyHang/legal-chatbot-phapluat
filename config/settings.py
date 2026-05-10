@@ -29,6 +29,6 @@ RAG_E5_MODEL          = "intfloat/multilingual-e5-large"
 
 # ── LLM / Ollama ───────────────────────────────────────────────
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
-PHOGPT_MODEL    = os.getenv("PHOGPT_MODEL", "mrjacktung/phogpt-4b-chat-gguf")  
+PHOGPT_MODEL = os.getenv("PHOGPT_MODEL", "phogpt-legal") 
 LLM_TEMPERATURE = float(os.getenv("LLM_TEMPERATURE", "0.1"))
-LLM_MEMORY_K    = int(os.getenv("LLM_MEMORY_K", "5"))
+LLM_MEMORY_K    = int(os.getenv("LLM_MEMORY_K", "2"))
