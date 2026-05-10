@@ -146,13 +146,11 @@ Trọng số `alpha` và các tham số khác (`score_gate`, `chapter_boost`) đ
 Ở chế độ Global, hệ số nhân `chapter_boost` được áp dụng lên điểm của các chunk thuộc chương được dự đoán trước khi xếp hạng cuối — kết hợp sức mạnh của cả classifier lẫn hybrid retrieval.
 
 ### Tầng 3 — Sinh câu trả lời (PhoGPT-4B)
+Các đoạn văn được truy xuất ghép thành một khối ngữ cảnh và đưa vào prompt theo định dạng plain-text (không dùng ChatML) vì PhoGPT-4B được fine-tune theo format USER / ASSISTANT của SentencePiece. System prompt yêu cầu model chỉ trả lời dựa trên ngữ cảnh được cung cấp, và trả lời đúng một câu fallback cố định nếu ngữ cảnh không đủ thông tin.
 
-Các đoạn văn được truy xuất ghép thành một khối ngữ cảnh và đưa vào prompt theo định dạng **ChatML**. System prompt yêu cầu model chỉ trả lời dựa trên ngữ cảnh được cung cấp, và chỉ được phép trả lời đúng một câu fallback cố định nếu ngữ cảnh không đủ thông tin.
+Model được tạo lại qua ollama create với modelfile tùy chỉnh để loại bỏ stop token mặc định (<s>, </s>) vốn khiến output bị cắt ngắn sau 1–2 câu. Mỗi chunk được giới hạn còn 600 ký tự trước khi đưa vào prompt để kiểm soát độ trễ và tránh vượt quá context window hiệu dụng.
 
-Stop token (`<|im_end|>`, `<|im_start|>`) ngăn model tiếp tục sinh thêm các lượt hội thoại mới. Mỗi chunk được cắt ngắn còn **800 ký tự** trước khi đưa vào prompt để kiểm soát độ trễ và tránh vượt quá context window hiệu dụng.
-
-Đầu ra được lọc qua bộ hậu xử lý loại bỏ các artifact định dạng còn sót lại.
-
+Đầu ra được lọc qua bộ hậu xử lý loại bỏ các artifact định dạng còn sót lại. Cơ chế phát hiện hallucination so sánh câu trả lời với lịch sử hội thoại, tự động fallback về đoạn RAG liên quan nhất nếu phát hiện model đang lặp lại câu trả lời cũ.
 ---
 
 ## Kết quả đánh giá
@@ -220,7 +218,7 @@ legal-chatbot-phapluat/
 │   └── screenshots/          # Ảnh giao diện cho README
 │
 ├── llm/
-│   ├── chain.py              # LegalChatChain (ChatML, stop tokens, streaming)
+│   ├── chain.py              # LegalChatChain (plain-text prompt, streaming, fallback)
 │   ├── prompts.py            # Prompt template và system prompt
 │   └── memory.py             # Quản lý lịch sử hội thoại
 │
@@ -264,9 +262,17 @@ pip install -r requirements.txt
 ```
 
 ### Bước 3 — Tải mô hình ngôn ngữ PhoGPT
-
 ```bash
+# Pull model gốc
 ollama pull mrjacktung/phogpt-4b-chat-gguf
+
+# Tạo Modelfile (tạo file tên Modelfile, không có đuôi)
+FROM mrjacktung/phogpt-4b-chat-gguf
+PARAMETER temperature 0.3
+PARAMETER num_predict 512
+
+# Tạo model tùy chỉnh bỏ stop token mặc định
+ollama create phogpt-legal -f Modelfile
 ```
 
 ### Bước 4 — Tải model và data nặng
