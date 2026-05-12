@@ -1,12 +1,5 @@
 """
 app/pipeline.py  ·  Ngày 6 – Production-Grade Pipeline
-=======================================================
-NHỮNG GÌ ĐÃ SỬA:
-  [FIX-1] Singleton cache PhoBERT classifier.
-  [FIX-2] answer_dict() có schema nhất quán: luôn có đủ keys.
-  [FIX-3] Route mode được expose ra ngoài để UI hiển thị.
-  [FIX-4] Mọi exception đều được catch → không bao giờ crash UI.
-  [FIX-5] get_context() luôn trả str (kể cả khi lỗi).
 """
 
 import os, sys, threading
@@ -44,7 +37,7 @@ def _format(result: dict) -> str:
         "", _SEP, "📄 NỘI DUNG LIÊN QUAN:", _SEP,
     ]
     if not passages:
-        lines.append("\n⚠️  Không tìm thấy nội dung phù hợp.")
+        lines.append("\n  Không tìm thấy nội dung phù hợp.")
     else:
         for p in passages:
             lines.append(f"\n[Đoạn {p['rank']} | Ch.{p['chapter']}: {p['chapter_name']} | {p['score']:.3f}]")
@@ -57,11 +50,11 @@ def answer(question: str, top_k: int = 3) -> str:
     """Trả về string có định dạng. Không bao giờ raise."""
     q = question.strip() if isinstance(question, str) else ""
     if not q:
-        return "⚠️  Vui lòng nhập câu hỏi."
+        return " Vui lòng nhập câu hỏi."
     try:
         return _format(_get_rag().answer(q, top_k=top_k, verbose=False))
     except Exception as e:
-        return f"⚠️  Lỗi hệ thống: {e}"
+        return f" Lỗi hệ thống: {e}"
 
 
 def answer_dict(question: str, top_k: int = 3) -> dict:
