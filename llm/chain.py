@@ -1,6 +1,5 @@
 """
 llm/chain.py
-LegalChatChain – Plain-text prompt cho PhoGPT-4B
 """
 
 import json
@@ -12,7 +11,7 @@ from typing import Dict, List, Generator
 
 from langchain_community.llms.ollama import Ollama
 
-from llm.prompts import SYSTEM_PROMPT, build_phogpt_prompt   # ← đổi tên hàm
+from llm.prompts import SYSTEM_PROMPT, build_phogpt_prompt  
 from llm.memory import get_recent_history
 
 logger = logging.getLogger(__name__)
@@ -20,7 +19,6 @@ logger = logging.getLogger(__name__)
 
 class LegalChatChain:
     """
-    Chain chính: RAG → PhoGPT-4B → Answer
     Hỗ trợ non-streaming (ask) và streaming (ask_stream).
     """
 
@@ -249,7 +247,7 @@ class LegalChatChain:
         # 3. Lịch sử
         recent = get_recent_history(self.history, self.memory_k)
 
-        # 4. Plain-text prompt
+        # 4. ChatML prompt
         prompt_text = build_phogpt_prompt(
             system=SYSTEM_PROMPT,
             context=context,
