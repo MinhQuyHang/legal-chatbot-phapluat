@@ -22,12 +22,6 @@ DÙNG NHƯ MODULE trong code khác:
   predictor = PhoBERTPredictor()
   result = predictor.predict("Điều kiện để được hưởng trợ cấp thất nghiệp?")
   print(result)  # {'chapter': 3, 'confidence': 0.87, 'status': 'scoped', ...}
-
-NHỮNG GÌ ĐÃ BỔ SUNG (từ predict.py gốc SVM/LR):
-  [ADD-1] _validate()     — kiểm tra input trước khi tokenize (TypeError, ValueError)
-  [ADD-2] predict_safe()  — không bao giờ raise, dành cho UI/API
-  [FIX-1] predict()       — gọi _validate() thay vì preprocess() trực tiếp
-  [FIX-2] predict_batch() — dùng predict_safe() để 1 câu lỗi không crash cả batch
 """
 
 import os, re, json, unicodedata, warnings
@@ -166,7 +160,7 @@ class PhoBERTPredictor:
         """
         Predict chapter từ câu hỏi.
 
-        [FIX-1] Gọi _validate() thay vì preprocess() trực tiếp —
+        Gọi _validate() thay vì preprocess() trực tiếp —
         phát hiện input xấu trước khi vào model.
 
         Args:
@@ -185,7 +179,7 @@ class PhoBERTPredictor:
             TypeError  : nếu question không phải str
             ValueError : nếu câu hỏi quá ngắn
         """
-        # [FIX-1] validate + preprocess một lần, raise sớm nếu lỗi
+        # validate + preprocess một lần, raise sớm nếu lỗi
         text = self._validate(question)
 
         # Tokenize
@@ -226,7 +220,7 @@ class PhoBERTPredictor:
 
     def predict_safe(self, question: str) -> dict:
         """
-        [ADD-2] Không bao giờ raise — dành cho UI/API và batch processing.
+        Không bao giờ raise — dành cho UI/API và batch processing.
 
         Dùng khi không muốn try/except ở phía caller (Streamlit, FastAPI, v.v.)
 
@@ -281,7 +275,7 @@ def run_streamlit_app():
     # Kiểm tra model đã tồn tại chưa
     if not os.path.exists(PHOBERT_SAVE_DIR):
         st.error(
-            f"⚠️ Chưa tìm thấy model tại `model/phobert_classifier/`\n\n"
+            f" Chưa tìm thấy model tại `model/phobert_classifier/`\n\n"
             f"Hãy train trên Google Colab trước, sau đó download model về."
         )
         st.code(
