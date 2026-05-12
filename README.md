@@ -38,7 +38,7 @@ LawChat giải quyết vấn đề này bằng cách ràng buộc toàn bộ qu�
 
 **Các tính năng chính:**
 
--  **Phân loại câu hỏi thông minh** — PhoBERT tự động xác định câu hỏi thuộc chương nào, thu hẹp không gian tìm kiếm từ 1.034 chunks xuống còn phạm vi 1 chương khi đủ tự tin.
+-  **Phân loại câu hỏi thông minh** — PhoBERT tự động xác định câu hỏi thuộc chương nào, thu hẹp không gian tìm kiếm từ 936 chunks xuống còn phạm vi 1 chương khi đủ tự tin.
 -  **Truy xuất lai (Hybrid Search)** — kết hợp Dense Retrieval (E5-Large + FAISS) và Sparse Retrieval (BM25) để bắt được cả ngữ nghĩa lẫn từ khóa pháp lý đặc thù.
 -  **Sinh câu trả lời có kiểm soát** — Qwen2.5:7b với định dạng prompt ChatML, ràng buộc chặt chẽ vào ngữ cảnh được truy xuất.
 -  **Nguồn tham khảo minh bạch** — mỗi câu trả lời đi kèm danh sách đoạn trích được dùng, kèm điểm liên quan.
@@ -123,13 +123,13 @@ Với mỗi câu hỏi, bộ phân loại sinh ra phân phối xác suất trên
 - `confidence` — xác suất của lớp được dự đoán cao nhất
 - `margin` — khoảng cách giữa xác suất top-1 và top-2
 
-Khi cả hai vượt ngưỡng tương ứng (`CONFIDENCE_THRESHOLD = 0.45`, `MARGIN_THRESHOLD = 0.15`), pipeline chuyển sang chế độ **Scoped**: chỉ các chunk thuộc chương được dự đoán mới được đưa vào tính điểm. Ngược lại, hệ thống fallback sang chế độ **Global**, tìm kiếm toàn bộ 1.034 chunk.
+Khi cả hai vượt ngưỡng tương ứng (`CONFIDENCE_THRESHOLD = 0.45`, `MARGIN_THRESHOLD = 0.15`), pipeline chuyển sang chế độ **Scoped**: chỉ các chunk thuộc chương được dự đoán mới được đưa vào tính điểm. Ngược lại, hệ thống fallback sang chế độ **Global**, tìm kiếm toàn bộ 936 chunk.
 
 Các ngưỡng được chọn qua grid search trên tập validation, tối ưu hóa tích của tỷ lệ Scoped và độ chính xác top-2.
 
 ### Tầng 2 — Truy xuất lai (Hybrid Retrieval)
 
-Kho tri thức gồm **1.034 chunk** văn bản trích từ giáo trình, được bổ sung thêm 735 cặp hỏi-đáp dạng FAQ để cải thiện recall trên các câu hỏi ngắn, trực tiếp.
+Kho tri thức gồm **936 chunk** văn bản trích từ giáo trình, được bổ sung thêm 735 cặp hỏi-đáp dạng FAQ để cải thiện recall trên các câu hỏi ngắn, trực tiếp.
 
 **Dense retrieval** mã hóa câu hỏi và đoạn văn bằng `intfloat/multilingual-e5-large` (prefix câu hỏi: `query:`, prefix đoạn văn: `passage:`). Embedding được lưu trong FAISS `IndexFlatIP` và tính sẵn khi khởi động. Độ tương đồng là cosine trên vector đã L2-normalize.
 
@@ -287,7 +287,7 @@ Script sẽ tự động tải về và đặt đúng vị trí các file sau:
 | File | Mô tả | Kích thước |
 |---|---|---|
 | `model/phobert_classifier/` | Trọng số PhoBERT đã fine-tune | ~500MB |
-| `data/rag_data.json` | 1.034 chunk tri thức | ~8MB |
+| `data/rag_data.json` | 936 chunk tri thức | ~8MB |
 | `data/faiss_index.bin` | FAISS vector index | ~30MB |
 | `data/faiss_meta.json` | Metadata của FAISS index | ~2MB |
 
