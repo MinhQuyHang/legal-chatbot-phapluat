@@ -1,0 +1,5 @@
+FROM qwen2.5:7b
+PARAMETER temperature 0.1
+PARAMETER num_predict 512
+PARAMETER stop "CÂU HỎI:"
+PARAMETER stop "TÀI LIỆU"

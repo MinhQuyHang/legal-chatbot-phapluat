@@ -1,0 +1,4 @@
+OLLAMA_BASE_URL=http://localhost:11434
+PHOGPT_MODEL=phogpt-legal
+LLM_TEMPERATURE=0.1
+LLM_MEMORY_K=2

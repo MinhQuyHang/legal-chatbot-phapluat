@@ -1,0 +1,29 @@
+## Requirements — NLP Project Cuối Kỳ (Phù hợp Python 3.13)
+
+# Core NLP
+pandas>=2.2.2
+numpy>=2.1.0
+scikit-learn>=1.5.0
+scipy>=1.13.0
+
+# Vietnamese NLP
+underthesea>=6.8.0
+rank-bm25>=0.2.2
+
+# LangChain + Ollama (Bản mới nhất - tương thích Python 3.13)
+langchain>=1.0.0
+langchain-community>=0.4.0
+langchain-core>=1.0.0
+langchain-classic>=1.0.0
+
+# Web UI
+streamlit>=1.35.0
+
+# Utils
+pydantic>=2.7.0
+python-dotenv>=1.0.1
+requests>=2.32.0
+
+# Embedding & Vector Search
+sentence-transformers>=3.0.0
+faiss-cpu>=1.8.0

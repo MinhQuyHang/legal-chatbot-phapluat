@@ -1,0 +1,23 @@
+{
+  "model_type": "phobert",
+  "base_model": "vinai/phobert-base",
+  "best_epoch": 5,
+  "val_macro_f1": 0.659,
+  "test_macro_f1": 0.729,
+  "test_accuracy": 0.7658,
+  "use_segment": true,
+  "num_labels": 10,
+  "max_len": 128,
+  "splits": {
+    "train": 514,
+    "val": 110,
+    "test": 111
+  },
+  "rag_thresholds": {
+    "score": 0.3727,
+    "conf_threshold": 0.3,
+    "margin_threshold": 0.15,
+    "scoped_ratio": 0.4,
+    "top2_accuracy": 0.9318
+  }
+}

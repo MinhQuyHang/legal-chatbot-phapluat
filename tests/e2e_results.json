@@ -1,0 +1,17 @@
+{
+  "retriever": "multilingual-e5",
+  "label": "FULL-20",
+  "n": 20,
+  "keyword_hit_at_1": 1.0,
+  "chapter_hit_at_1": 0.95,
+  "chapter_hit_at_3": 0.95,
+  "mrr": 0.95,
+  "cosine_sim_avg": 0.9675,
+  "latency_avg_ms": 713.61,
+  "latency_p95_ms": 758.78,
+  "route_distribution": {
+    "scoped": 1,
+    "global": 19
+  },
+  "failed_questions": []
+}
